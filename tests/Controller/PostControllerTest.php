@@ -22,6 +22,7 @@ class PostControllerTest extends WebTestCase
 
         $data = [
             'content' => 'Content of a new post',
+            'email'   => 'user2@gmail.com'
         ];
 
         $client->request('POST',
@@ -35,12 +36,31 @@ class PostControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testPostPostsWithoutEmail(): void
+    {
+        $client = static::createClient();
+
+        $data = [
+            'content' => 'The new content is created'
+        ];
+
+        $client->request('POST',
+            '/api/posts',
+            array(),
+            array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            json_encode($data)
+        );
+        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+    }
+
     public function testPostInvalidPosts(): void
     {
         $client = static::createClient();
 
         $data = [
-            'content' => 'C',
+            'content' => 'T',
+            'email' => 'rares.naghi@russmedia.com'
         ];
 
         $client->request('POST',

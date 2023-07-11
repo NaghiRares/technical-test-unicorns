@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\PostRepository;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Services\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -66,7 +67,7 @@ class PostController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
         ValidatorService $validator,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
     ): JsonResponse
     {
         $post = $serializer->deserialize(
@@ -75,9 +76,21 @@ class PostController extends AbstractController
             [AbstractObjectNormalizer::GROUPS => ['post_get'], AbstractObjectNormalizer::DEEP_OBJECT_TO_POPULATE => true],
         );
 
-        $user = new User();
-        $user->setName('Rares Naghi');
-        $user->setEmail("rares.naghi@russmedia.com");
+        $requestParameter = json_decode($request->getContent(),true);
+        $user = $post->getUser();
+
+        if (!$user) {
+            if (isset($requestParameter['email'])) {
+                $user = $em->getRepository(User::class)->findOneBy(['email' => $requestParameter['email']]);
+                if (!$user) {
+                    $user = new User();
+                    $user->setName('Rares Naghi');
+                    $user->setEmail($requestParameter['email']);
+                }
+            } else {
+                return $this->json('Please provide user email or user ID', 404);
+            }
+        }
 
         $validator->validate($user);
 
