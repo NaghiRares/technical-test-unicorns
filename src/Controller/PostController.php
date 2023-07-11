@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\PostRepository;
 use App\Entity\Post;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Services\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -67,7 +66,7 @@ class PostController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
         ValidatorService $validator,
-        SerializerInterface $serializer,
+        SerializerInterface $serializer
     ): JsonResponse
     {
         $post = $serializer->deserialize(
