@@ -10,37 +10,49 @@ A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony
 2. Run `docker compose build --pull --no-cache` to build fresh images
 3. Run `docker compose up` (the logs will be displayed in the current shell)
 4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+5. API Documentation: https://localhost/api/doc
+6. Run `docker compose down --remove-orphans` to stop the Docker containers.
 
 ## Features
+- Get a list of all the unicorns at the farm
+- Create a post in my name
+- Fix a typo I made in my post
+- See all posts that were made
+- Delete a post I made
+- Purchase a unicorn, which should:
+  - Send an email containing all posts that were made of my newly bought unicorn
+  - Delete all posts linked to my unicorn
 
-* Production, development and CI ready
-* [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-* Automatic HTTPS (in dev and in prod!)
-* HTTP/2, HTTP/3 and [Preload](https://symfony.com/doc/current/web_link.html) support
-* Built-in [Mercure](https://symfony.com/doc/current/mercure.html) hub
-* [Vulcain](https://vulcain.rocks) support
-* Native [XDebug](docs/xdebug.md) integration
-* Just 2 services (PHP FPM and Caddy server)
-* Super-readable configuration
+## API endpoints:
+GET
+/api/posts
 
-**Enjoy!**
+POST
+/api/posts
 
-## Docs
+PUT
+/api/posts/{id}
 
-1. [Build options](docs/build.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [TLS Certificates](docs/tls.md)
-7. [Using a Makefile](docs/makefile.md)
-8. [Troubleshooting](docs/troubleshooting.md)
+DELETE
+/api/posts/{id}
 
-## License
+PATCH
+/api/posts/{id}
 
-Symfony Docker is available under the MIT License.
+GET
+/api/unicorns
 
-## Credits
+POST
+/api/unicorns
 
-Created by [Kévin Dunglas](https://dunglas.fr), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+PUT
+/api/unicorns/{id}
+
+DELETE
+/api/unicorns/{id}
+
+PATCH
+/api/unicorns/{id}
+
+POST
+/api/users/{id}/unicorns/{unicorn_id}/purchase
